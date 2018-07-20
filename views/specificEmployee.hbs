@@ -1,0 +1,52 @@
+<p style="font-size: 30px;color:rgb(47, 134, 168);">Employee Id: {{EmployeeId}} <br>
+Employee Name: {{FirstName}} {{LastName}}
+</p>
+<hr/>
+
+<script> 
+
+function onSubmit() {
+        const FirstName = document.getElementById('firstName').value;
+        const LastName = document.getElementById('lastName').value;
+        $.ajax({
+
+        url: '/employees/{{EmployeeId}}',
+
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ FirstName: FirstName, LastName: LastName }),
+            method: 'PUT', complete: () => window.location.reload()
+            })
+        }
+
+ function onDelete() {
+        $.ajax({
+            url: '/employees/{{EmployeeId}}/delete',
+            method: 'DELETE', complete: () => window.location = "/employees"
+        })
+    }
+    
+    </script>
+    
+<h3>Update Album:</h3>
+
+<form onsubmit="onSubmit(); return false"> {{! prevents the form from defaulting to the GET method }}
+  <div>
+      <label for="name">First Name: </label>
+      <input type="text" name="firstName" id="firstName" value="{{FirstName}}">
+  </div>
+   <div>
+      <label for="name">Last Name: </label>
+      <input type="text" name="lastName" id="lastName" value="{{LastName}}">
+  </div>
+
+  <div class="button-box1">
+      <button class="btn" type="submit" id="submitButton">Update</button>
+      <a class="btn" href="/employees" id="back">Back</a><br>
+      <button class="btn" onclick="onDelete()" id="deleteButton">Delete Employee</button>
+  </div>
+  
+</form>
+
+<div>
+    
+</div>

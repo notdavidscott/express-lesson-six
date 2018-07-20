@@ -109,7 +109,88 @@ router.delete('/albums/:id/delete', (req, res) => {
   });
 });
 
+router.get('/employees', (req, res, next) => {
+  models.employees
+  .findAll({
+    where: {
+      Deleted: null
+    }
+  }).then(employeesFound => {
+    res.render('employees', {
+      employees: employeesFound
+    });
+  });
+});
 
+router.get('/employees/:id', (req, res) => {
+  let employeeId = req.params.id;
+  models.employees
+  .find({
+    where: 
+    {
+      EmployeeId: employeeId
+    },
+  })
+  .then(employee => {
+    res.render('specificEmployee', {
+      EmployeeId: employee.EmployeeId,
+      FirstName: employee.FirstName,
+      LastName: employee.LastName
+    });
+  });
+});
+
+router.put('/employees/:id', (req, res) => {
+  let employeeId = parseInt(req.params.id);
+  models.employees.update({
+    FirstName: req.body.FirstName, 
+    LastName: req.body.LastName
+    }, 
+    {
+      where: {
+        EmployeeId: employeeId
+      }
+    })
+    .then(result => {
+      res.send();
+    });
+
+});
+
+router.delete('/employees/:id/delete', (req, res) => {
+  let employeeId = parseInt(req.params.id);
+  models.employees
+  .update(
+    {
+      Deleted: 'true'
+    },
+    {
+      where: {
+        EmployeeId: employeeId
+      }
+    }
+  
+  )
+  .then(employee => {
+    res.redirect('/employees');
+  });
+});
+
+// router.post('/employees', (req, res) => {
+//   models.employees
+//   .findOrCreate({
+//     where: {
+//      FirstName: req.body.FirstName, 
+//      LastName: req.body.LastName
+//     }
+//   }).spread(function(result, created) {
+//       if (created) {
+//         res.redirect('/employees');
+//       } else {
+//         res.send('Employee already exists');
+//       }
+//     });
+//   });
 
 
 
